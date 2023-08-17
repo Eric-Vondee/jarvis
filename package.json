@@ -1,0 +1,31 @@
+{
+  "name": "jarvis",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "dev": "nodemon --config nodemon.json",
+    "build": "tsup src/index.ts && tsc --declaration",
+    "format": "prettier --write \"**/*.ts\""
+  },
+  "repository": "https://github.com/Eric-Vondee/jarvis.git",
+  "author": "Eric-Vondee",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "envalid": "^7.3.1",
+    "ethers": "5.7.2",
+    "node-fetch": "2",
+    "telegraf": "^4.12.2",
+    "tsup": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.0",
+    "@types/node-fetch": "^2.6.4",
+    "dotenv": "^16.3.1",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}
