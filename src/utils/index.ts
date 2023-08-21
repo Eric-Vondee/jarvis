@@ -49,6 +49,8 @@ export const filterToken = async (
     "-" +
     ("0" + convertAuditedDate.getDate()).slice(-2);
   return {
+    status: true,
+    message: "",
     blockchain: blockchain,
     name: tokenInfo.name,
     symbol: tokenInfo.symbol,

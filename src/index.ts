@@ -26,6 +26,7 @@ bot.command("search", async (ctx) => {
 
 let chain = "";
 bot.on("text", async (ctx) => {
+  console.log(ctx);
   const tokenAddress = ctx.update.message.text;
   const regex = /^0x[a-fA-F0-9]{40}$/;
   if (!regex.test(tokenAddress)) {
