@@ -1,7 +1,11 @@
 import config from "../../config/index";
 import fetch from "node-fetch";
 
-export const filterToken = async (blockchain: string, tokenAddress: string) => {
+export const filterToken = async (
+  blockchain: string,
+  tokenAddress: string,
+  ctx: any,
+) => {
   const date = new Date();
   const currentDate =
     date.getFullYear() +
@@ -20,8 +24,14 @@ export const filterToken = async (blockchain: string, tokenAddress: string) => {
 
   let data = await response.json();
   let tokenInfo = data.data;
-  if (tokenInfo == null) return false;
+  if (tokenInfo == null)
+    return { status: false, message: "Error:This token doesn't exist" };
   let blockchainInfo = getBlockchainParams(blockchain);
+  if (tokenInfo.pairs.length == 0)
+    return {
+      status: false,
+      message: "Error:No liquidity pool associated with token",
+    };
   let splitPairAddresses = tokenInfo.pairs[0].address.split("-");
   let pairAddress = splitPairAddresses[0];
   const { dailyTxnCount, dailyVolume } = await getDailyPoolInfo(
@@ -51,7 +61,7 @@ export const filterToken = async (blockchain: string, tokenAddress: string) => {
       tokenInfo.audit.codeVerified == undefined
         ? false
         : tokenInfo.audit.codeVerified,
-    auditedDate: !tokenInfo.audit.date ? "":  auditedDate,
+    auditedDate: !tokenInfo.audit.date ? "" : auditedDate,
     dextScore: tokenInfo.pairs[0].dextScore,
     dailyTxnCount: dailyTxnCount,
     dailyVolume: dailyVolume,

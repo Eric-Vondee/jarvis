@@ -32,8 +32,11 @@ bot.on("text", async (ctx) => {
     return ctx.reply(`Error: Invalid checksum/contract address`);
   }
   try {
-    const token: any = await filterToken(chain, tokenAddress);
-    if (!token) ctx.reply(`Error: Token not found`);
+    const token: any = await filterToken(chain, tokenAddress, ctx);
+    if (!token.status) {
+      ctx.reply(token.message);
+      return;
+    }
     const output = `
   Blockchain: ${token.blockchain.toUpperCase()} \n
   Name: ${token.name}, \n 
