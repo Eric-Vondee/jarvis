@@ -20,6 +20,7 @@ export const filterToken = async (blockchain: string, tokenAddress: string) => {
 
   let data = await response.json();
   let tokenInfo = data.data;
+  if (tokenInfo == null) return false;
   let blockchainInfo = getBlockchainParams(blockchain);
   let splitPairAddresses = tokenInfo.pairs[0].address.split("-");
   let pairAddress = splitPairAddresses[0];

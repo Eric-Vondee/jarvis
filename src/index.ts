@@ -15,26 +15,25 @@ bot.help((ctx) => {
 });
 
 bot.command("search", async (ctx) => {
-  const command = "/search";
-  const message = ctx.message.text;
-  const errorMessage = "Command used wrongly, Use /help for guidance";
-  const params = message
-    .replace(command, "")
-    .trim()
-    .split(" ")
-    .reduce((obj: any, param) => {
-      const [key, value] = param.split("=");
-      if (key) {
-        obj[key] = value;
-      }
-      return obj;
-    }, {});
+  const commandList = [{ text: "Search Token", callback_data: "search" }];
+  const options = {
+    reply_markup: {
+      inline_keyboard: [commandList],
+    },
+  };
+  ctx.sendMessage("Welcome! Please select a command:", options);
+});
+
+let chain = "";
+bot.on("text", async (ctx) => {
+  const tokenAddress = ctx.update.message.text;
   const regex = /^0x[a-fA-F0-9]{40}$/;
-  if (!regex.test(params.tokenAddress)) {
+  if (!regex.test(tokenAddress)) {
     return ctx.reply(`Error: Invalid checksum/contract address`);
   }
   try {
-    const token = await filterToken(params.network, params.tokenAddress);
+    const token: any = await filterToken(chain, tokenAddress);
+    if (!token) ctx.reply(`Error: Token not found`);
     const output = `
   Blockchain: ${token.blockchain.toUpperCase()} \n
   Name: ${token.name}, \n 
@@ -61,6 +60,39 @@ bot.command("search", async (ctx) => {
     if (e instanceof Error) {
       console.log(e);
     }
+  }
+});
+bot.on("callback_query", async (ctx) => {
+  //@ts-ignore
+  const functionData = ctx.update.callback_query.data;
+
+  switch (functionData) {
+    case "search":
+      const defaultValuesRow = [
+        { text: "Binance(BSC)", callback_data: "default:bsc" },
+        { text: "Celo", callback_data: "default:celo" },
+        { text: "Ethereum", callback_data: "default:ether" },
+        { text: "Polygon", callback_data: "default:polygon" },
+      ];
+      const options = {
+        reply_markup: {
+          inline_keyboard: [defaultValuesRow],
+        },
+      };
+      ctx.sendMessage("Please select the blockchain:", options);
+      break;
+    case "default:bsc":
+    case "default:celo":
+    case "default:ether":
+    case "default:polygon":
+      const selectedValue = functionData.split(":")[1];
+      chain = selectedValue;
+      ctx.sendMessage(`You selected: ${selectedValue} chain`);
+      ctx.reply("Please input token address");
+      break;
+    default:
+      ctx.sendMessage("Invalid option. Please select a valid option.");
+      break;
   }
 });
 
