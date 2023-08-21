@@ -69,7 +69,7 @@ bot.on("callback_query", async (ctx) => {
   switch (functionData) {
     case "search":
       const defaultValuesRow = [
-        { text: "Binance(BSC)", callback_data: "default:bsc" },
+        { text: "BSC", callback_data: "default:bsc" },
         { text: "Celo", callback_data: "default:celo" },
         { text: "Ethereum", callback_data: "default:ether" },
         { text: "Polygon", callback_data: "default:polygon" },
