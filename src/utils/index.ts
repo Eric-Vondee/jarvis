@@ -51,7 +51,7 @@ export const filterToken = async (blockchain: string, tokenAddress: string) => {
       tokenInfo.audit.codeVerified == undefined
         ? false
         : tokenInfo.audit.codeVerified,
-    auditedDate: auditedDate,
+    auditedDate: !tokenInfo.audit.date ? "":  auditedDate,
     dextScore: tokenInfo.pairs[0].dextScore,
     dailyTxnCount: dailyTxnCount,
     dailyVolume: dailyVolume,
