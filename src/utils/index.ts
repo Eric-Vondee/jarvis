@@ -25,7 +25,7 @@ export const filterToken = async (
   let data = await response.json();
   let tokenInfo = data.data;
   if (tokenInfo == null)
-    return { status: false, message: "Error:This token doesn't exist" };
+    return { status: false, message: "Error:Token doesn't exist" };
   let blockchainInfo = getBlockchainParams(blockchain);
   if (tokenInfo.pairs.length == 0)
     return {
@@ -57,7 +57,10 @@ export const filterToken = async (
     poolSymbol: tokenInfo.pairs[0].tokenRef.symbol,
     description: tokenInfo.info.description,
     holders: tokenInfo.metrics.holders,
-    circulatingSupply: tokenInfo.metrics.circulatingSupply,
+    circulatingSupply:
+      tokenInfo.metrics.circulatingSupply == undefined
+        ? "unknown"
+        : tokenInfo.metrics.circulatingSupply,
     totalSupply: tokenInfo.totalSupply,
     audited:
       tokenInfo.audit.codeVerified == undefined
