@@ -1,2 +1,2 @@
 # jarvis
-Token Info Bot
+Token Info Bot.
